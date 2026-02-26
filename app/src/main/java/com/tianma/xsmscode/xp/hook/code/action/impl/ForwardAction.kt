@@ -18,6 +18,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONObject
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
@@ -166,7 +169,7 @@ class ForwardAction(pluginContext: Context, phoneContext: Context, smsMsg: SmsMs
                 if (!mSmsMsg.company.isNullOrBlank()) {
                     append('\n').append("Company: ").append(mSmsMsg.company)
                 }
-                append('\n').append("Time: ").append(mSmsMsg.date)
+                append('\n').append("Time: ").append(formatDate(mSmsMsg.date))
             }
             if (!isCodeSms) {
                 append(mSmsMsg.body.orEmpty())
@@ -229,6 +232,10 @@ class ForwardAction(pluginContext: Context, phoneContext: Context, smsMsg: SmsMs
         }.getOrDefault(false)
     }
 
+    private fun formatDate(timestamp: Long): String {
+        return SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.getDefault()).format(Date(timestamp))
+    }
+
     private fun forwardToTelegram(
         botToken: String,
         chatId: String,
@@ -244,7 +251,7 @@ class ForwardAction(pluginContext: Context, phoneContext: Context, smsMsg: SmsMs
                 if (!mSmsMsg.company.isNullOrBlank()) {
                     append('\n').append("Company: ").append(mSmsMsg.company)
                 }
-                append('\n').append("Time: ").append(mSmsMsg.date)
+                append('\n').append("Time: ").append(formatDate(mSmsMsg.date))
             }
             if (!isCodeSms) {
                 append(mSmsMsg.body.orEmpty())
